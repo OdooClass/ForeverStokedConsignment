@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Consignment Invoicing Form View -->
+        <record id="view_consignment_invoicing_form" model="ir.ui.view">
+            <field name="name">consignment.invoicing.form</field>
+            <field name="model">consignment.invoicing</field>
+            <field name="arch" type="xml">
+                <form string="Consignment Invoicing">
+                   <header>
+                        <button name="button_post" type="object" string="Post" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                       
+                        <button name="fetch_products" string="Fetch Products" type="object" class="btn-primary"/>
+  
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                         
+                        <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Line Items">
+                                <field name="line_ids" mode="tree,form" context="{'default_consignment_id': active_id}">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="product_id"/>
+                                            <field name="quantity"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Consignment Invoicing Tree View -->
+        <record id="view_consignment_invoicing_tree" model="ir.ui.view">
+            <field name="name">consignment.invoicing.tree</field>
+            <field name="model">consignment.invoicing</field>
+            <field name="arch" type="xml">
+                <tree string="Consignment Invoicing">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Consignment Invoicing Action -->
+        <record id="action_consignment_invoicing" model="ir.actions.act_window">
+            <field name="name">Consignment Invoicing</field>
+            <field name="res_model">consignment.invoicing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_consignment_invoicing_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Consignment Invoicing record
+                </p>
+            </field>
+        </record>
+                 <record id="view_res_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+             
+                  <!-- Add the "Consignments" button as the 2nd button in the 'button_box' section -->
+                <xpath expr="//div[@name='button_box']/*[2]" position="before">
+                    <button name="action_view_consignments" string="Consignments" type="object" class="oe_stat_button" icon="fa-truck"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_order_form_inherit_consignment" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.consignment</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button name="action_view_consignment" type="object" string="Consignment" class="oe_highlight"/>
+                </header>
+            </field>
+        </record>
+              <record id="consignment_invoicing_tree_view" model="ir.ui.view">
+            <field name="name">consignment.invoicing.tree</field>
+            <field name="model">consignment.invoicing</field>
+            <field name="arch" type="xml">
+                <tree string="Consignment Invoicing">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Consignment Invoicing Menu -->
+        <menuitem id="menu_consignment_invoicing" name="Consignment Invoicing" action="action_consignment_invoicing" sequence="10" parent="sale.sale_menu_root"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_product_by_customer_tree" model="ir.ui.view">
+        <field name="name">sale.order.product.by.customer.tree</field>
+        <field name="model">sale.order.product.by.customer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="product_uom_qty"/>
+                <field name="qty_to_invoice"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sale_order_product_by_customer" model="ir.actions.act_window">
+        <field name="name">Sale Order Products by Customer</field>
+        <field name="res_model">sale.order.product.by.customer</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_sale_order_product_by_customer_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records found.
+            </p>
+            <p>
+                This view shows all products open on a sales order by customer.
+            </p>
+        </field>
+    </record>
+    <record id="action_open_sale_order_form" model="ir.actions.act_window">
+    <field name="name">Open Sales Order</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">form</field>
+    <field name="target">current</field>
+</record>
+
+<record id="action_open_invoice_form" model="ir.actions.act_window">
+    <field name="name">Open Invoice</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">account.move</field>
+    <field name="view_mode">form</field>
+    <field name="target">current</field>
+</record>
+
+<record id="view_sale_order_product_by_customer_tree" model="ir.ui.view">
+    <field name="name">sale.order.product.by.customer.tree</field>
+    <field name="model">sale.order.product.by.customer</field>
+    <field name="arch" type="xml">
+        <tree default_group_by="partner_id">
+            <field name="partner_id"/>
+            <field name="order_id" options='{"no_open": True}'/>
+            <field name="product_id"/>
+            <field name="product_uom_qty"/>
+            <field name="qty_to_invoice"/>
+            <field name="invoice_id" options='{"no_open": True}'/>
+        </tree>
+    </field>
+</record>
+
+<!-- The rest of the XML file remains the same -->
+
+    <menuitem id="menu_sale_order_product_by_customer" name="Sale Order Products by Customer" parent="sale.menu_sale_order" action="action_sale_order_product_by_customer" sequence="15"/>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consignment_invoicing,access_consignment_invoicing,model_consignment_invoicing,account.group_account_user,1,1,1,1
+access_consignment_invoicing_lineitem,access_consignment_invoicing_lineitem,model_consignment_invoicing_lineitem,account.group_account_user,1,1,1,1
+access_sale_order_product_by_customer,sale.order.product.by.customer,model_sale_order_product_by_customer,base.group_user,1,0,0,0
