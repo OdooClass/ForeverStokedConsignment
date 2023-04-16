@@ -4,9 +4,9 @@
     'category': 'Accounting',
     'summary': 'Invoicing for consignment products',
     'depends': ['sale', 'account'],
-    'author': 'Your Company',
+    'author': 'Greg Moss',
     'license': 'AGPL-3',
-    'website': 'https://www.yourcompany.com',
+    'website': 'https://www.odooclass.com',
     'description': """
 Consignment Invoicing
 =====================
