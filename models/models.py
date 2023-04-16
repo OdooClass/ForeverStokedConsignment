@@ -125,7 +125,36 @@ class ConsignmentInvoicingLineItem(models.Model):
 
     invoicing_id = fields.Many2one("consignment.invoicing", string="Invoicing", required=True, ondelete="cascade")
     product_id = fields.Many2one("product.product", string="Product", required=True)
-    quantity = fields.Float(string="Quantity", required=True, default=1.0)
+    quantity = fields.Float(string="Quantity", required=True, default=0)
+    product_qty_to_invoice = fields.Float(string='Qty to Invoice', compute='_compute_product_qty_to_invoice', store=True)
+
+    @api.depends('product_id')
+    def _compute_product_qty_to_invoice(self):
+        for line in self:
+            if line.product_id:
+                self.env.cr.execute("""
+                    SELECT
+                        sum(qty_to_invoice) as total_qty_to_invoice
+                    FROM
+                        sale_order_product_by_customer
+                    WHERE
+                        product_id = %s
+                """, (line.product_id.id,))
+                result = self.env.cr.fetchone()
+                line.product_qty_to_invoice = result[0] if result else 0
+                
+    def action_view_sales_orders(self):
+        self.ensure_one()
+        action = self.env.ref('sale.action_orders').read()[0]
+        action['domain'] = [
+            ('order_line.product_id', '=', self.product_id.id),
+            ('state', 'not in', ('cancel', 'done'))
+        ]
+        action['context'] = {
+            'search_default_product_id': self.product_id.id,
+            'search_default_qty_to_invoice': True
+        }
+        return action
     
 class ResPartner(models.Model):
     _inherit = 'res.partner'

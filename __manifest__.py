@@ -16,6 +16,7 @@ This module provides a way to invoice consignment products that have been sold.
     'data': [  'security/ir.model.access.csv',
         'views/consignment_invoicing_view.xml',
         'data/consignment_sequence.xml',
+        'views/sale_order_product_customer_view.xml',
       
       
     ],

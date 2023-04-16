@@ -8,8 +8,8 @@ class SaleOrderProductByCustomer(models.Model):
     partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
     order_id = fields.Many2one('sale.order', string='Sales Order', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
-    product_uom_qty = fields.Float('Quantity', readonly=True)
-    qty_to_invoice = fields.Float('Qty to Invoice', readonly=True)
+    product_uom_qty = fields.Float('Quantity Sold', readonly=True)
+    qty_to_invoice = fields.Float('Qty On Hand', readonly=True)
     invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True)
 
     @api.model
@@ -31,11 +31,13 @@ class SaleOrderProductByCustomer(models.Model):
                     LEFT JOIN account_move_line aml ON aml.id = rel.invoice_line_id
                     LEFT JOIN account_move am ON am.id = aml.move_id AND am.state != 'cancel'
                 WHERE
-                    so.state NOT IN ('cancel', 'done')
+                    so.state NOT IN ('cancel', 'done') 
                 GROUP BY
                     so.partner_id,
                     sol.order_id,
                     sol.product_id,
                     am.id
+                HAVING 
+                    sum(sol.qty_to_invoice) > 0
             )
         """)
